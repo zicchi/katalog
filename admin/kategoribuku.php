@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<?php include("includes/head.php") ?> 
+<?php include("includes/head.php") ?>
+    <title>kategori buku</title>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -39,7 +40,7 @@
               <!-- /.card-header -->
               <div class="card-body">
               <div class="col-md-12">
-                  <form method="" action="">
+                  <form method="get" action="kategoribuku.php">
                     <div class="row">
                         <div class="col-md-4 bottom-10">
                           <input type="text" class="form-control" id="kata_kunci" name="katakunci">
