@@ -5,6 +5,18 @@
     <title>kategori buku</title>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
+          <?php
+            include('../koneksi.php');
+              if((isset($_GET['aksi']))&&(isset($_GET['data']))){
+                if($_GET['aksi']=='hapus'){
+
+                  $id_kategori_buku = $_GET['data'];
+                  //hapus kategori buku
+                  $sql_dh = "delete from `kategori_buku` where `id_kategori_buku` = '$id_kategori_buku'";
+                  mysqli_query($koneksi,$sql_dh);
+                }
+              }
+          ?>
 <div class="wrapper">
 <?php include("includes/header.php") ?>
 
@@ -51,10 +63,17 @@
                     </div><!-- .row -->
                   </form>
                 </div><br>
-              <div class="col-sm-12">
-                  <div class="alert alert-success" role="alert">Data Berhasil Ditambahkan</div>
-                  <div class="alert alert-success" role="alert">Data Berhasil Diubah</div>
-              </div>
+                <div class="col-sm-12">
+                  <?php if(!empty($_GET['notif'])){?>
+                      <?php if($_GET['notif']=="tambahberhasil"){?>
+                        <div class="alert alert-success" role="alert">Data Berhasil Ditambahkan</div>
+                      <?php } else if($_GET['notif']=="editberhasil"){?>
+                        <div class="alert alert-success" role="alert">Data Berhasil Diubah</div>
+                      <?php } else if($_GET['notif']=="hapusberhasil"){?>
+                        <div class="alert alert-success" role="alert">Data Berhasil Dihapus</div>
+                      <?php }?>
+                    <?php }?>
+                </div>
                 <table class="table table-bordered">
                   <thead>                  
                     <tr>
@@ -64,22 +83,23 @@
                     </tr>
                   </thead>
                   <tbody>
+                  <?php
+                      $sql_k = "SELECT `id_kategori_buku`,`kategori_buku` FROM `kategori_buku` ORDER BY `kategori_buku`";
+                      $query_k = mysqli_query($koneksi,$sql_k);
+                      $no = 1;
+                      while($data_k = mysqli_fetch_row($query_k)){
+                      $id_kategori_buku = $data_k[0];
+                      $kategori_buku = $data_k[1];
+                  ?>
                     <tr>
-                      <td>1.</td>
-                      <td>Website</td>
+                      <td><?php echo $no; ?></td>
+                      <td><?php echo $kategori_buku; ?></td>
                       <td align="center">
-                        <a href="editkategoribuku.php" class="btn btn-xs btn-info"><i class="fas fa-edit"></i> Edit</a>
-                        <a href="#" class="btn btn-xs btn-warning"><i class="fas fa-trash"></i> Hapus</a>
+                      <a href="editkategoribuku.php?data=<?php echo $id_kategori_buku;?>" class="btn btn-xs btn-info"><i class="fas fa-edit"></i> Edit</a>
+                      <a href="javascript:if(confirm('Anda yakin ingin menghapus data <?php echo $kategori_buku; ?>?'))window.location.href ='kategoribuku.php?aksi=hapus&data=<?php echo $id_kategori_buku;?>&notif=hapusberhasil'" class="btn btn-xs btn-warning"><i class="fas fa-trash"></i>Hapus</a>
                       </td>
                     </tr>
-                    <tr>
-                      <td>2.</td>
-                      <td>Mobil</td>
-                      <td align="center">
-                        <a href="editkategoribuku.php" class="btn btn-xs btn-info"><i class="fas fa-edit"></i> Edit</a>
-                        <a href="#" class="btn btn-xs btn-warning"><i class="fas fa-trash"></i> Hapus</a>
-                      </td>
-                    </tr>
+                    <?php $no++;}?>
                   </tbody>
                 </table>
               </div>

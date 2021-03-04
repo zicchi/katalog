@@ -4,6 +4,23 @@
 <?php include("includes/head.php") ?> 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
+  <?php
+    session_start();
+    include('../koneksi.php');
+      if(isset($_GET['data'])){
+        
+        $id_kategori_buku = $_GET['data'];
+        $_SESSION['id_kategori_buku']=$id_kategori_buku;
+
+        //get data kategori buku
+        $sql_d = "select `kategori_buku` from `kategori_buku` where `id_kategori_buku` = '$id_kategori_buku'";        
+        $query_d = mysqli_query($koneksi,$sql_d);
+
+        while($data_d = mysqli_fetch_row($query_d)){
+          $kategori_buku= $data_d[0];
+        }
+      }
+  ?>
 <div class="wrapper">
 <?php include("includes/header.php") ?>
 
@@ -41,25 +58,31 @@
       <!-- /.card-header -->
       <!-- form start -->
       </br>
-      <div class="col-sm-10">
-          <div class="alert alert-danger" role="alert">Maaf data Kategori Buku wajib di isi</div>
-      </div>
-      <form class="form-horizontal">
+      <?php if(!empty($_GET['notif'])){?>
+        <?php if($_GET['notif']=="editkosong"){?>
+          <div class="alert alert-danger" role="alert">Maaf data kategori buku wajib di isi</div>
+        <?php }?>
+      <?php }?>
+
+      <form class="form-horizontal" method="post" action="konfirmasieditkategoribuku.php">
         <div class="card-body">
           <div class="form-group row">
-            <label for="Kategori Buku" class="col-sm-3 col-form-label">Kategori Buku</label>
+            <label for="kategori_buku" class="col-sm-3 col-form-label">Kategori Buku</label>
+
             <div class="col-sm-7">
-              <input type="text" class="form-control" id="Kategori Buku" value="Website">
+              <input type="text" class="form-control" id="kategori_buku" Name="kategori_buku" value="<?php echo $kategori_buku;?>">
             </div>
+
           </div>
         </div>
-        <!-- /.card-body -->
-        <div class="card-footer">
-          <div class="col-sm-10">
-            <button type="submit" class="btn btn-info float-right"><i class="fas fa-save"></i> Simpan</button>
-          </div>  
-        </div>
-        <!-- /.card-footer -->
+          <!-- /.card-body -->
+          <div class="card-footer">
+            <div class="col-sm-10">
+              <button type="submit" class="btn btn-info float-right">
+            <i class="fas fa-save"></i> Simpan</button>
+            </div>
+          </div>
+      <!-- /.card-footer -->
       </form>
     </div>
     <!-- /.card -->
