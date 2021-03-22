@@ -42,9 +42,22 @@
       <!-- form start -->
       </br>
       <div class="col-sm-10">
-          <div class="alert alert-danger" role="alert">Maaf data nama wajib di isi</div>
+      <?php if(!empty($_GET['notif'])){?>
+        <?php if($_GET['notif']=="namakosong"){?>
+          <div class="alert alert-danger" role="alert">Maaf data kategori buku wajib di isi</div>
+        <?php }?>
+        <?php if($_GET['notif']=="emailkosong"){?>
+          <div class="alert alert-danger" role="alert">Maaf data kategori buku wajib di isi</div>
+        <?php }?>
+        <?php if($_GET['notif']=="usernamekosong"){?>
+          <div class="alert alert-danger" role="alert">Maaf data kategori buku wajib di isi</div>
+        <?php }?>
+        <?php if($_GET['notif']=="passwordkosong"){?>
+          <div class="alert alert-danger" role="alert">Maaf data kategori buku wajib di isi</div>
+        <?php }?>        
+      <?php }?>
       </div>
-      <form class="form-horizontal">
+      <form class="form-horizontal" method="post" action="konfirmasitambahuser.php">
         <div class="card-body">
           <div class="form-group row">
             <label for="foto" class="col-sm-12 col-form-label"><span class="text-info"><i class="fas fa-user-circle"></i> <u>Data User</u></span></label>
@@ -85,7 +98,7 @@
           <div class="form-group row">
             <label for="level" class="col-sm-3 col-form-label">Level</label>
             <div class="col-sm-7">
-              <select class="form-control" id="jurusan">
+              <select class="form-control" name="level">
                 <option value="superadmin">superadmin</option>
                 <option value="admin">admin</option>
               </select>

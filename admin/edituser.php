@@ -4,6 +4,28 @@
 <?php include("includes/head.php") ?> 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
+<?php
+    session_start();
+    include('../koneksi.php');
+      if(isset($_GET['data'])){
+        
+        $id_user = $_GET['data'];
+        $_SESSION['id_user']=$id_user;
+
+        //get data kategori buku
+        $sql_d = "select `id_user`,`nama`,`email`,`username`,`password`,`level` from `user` where `id_user` = '$id_user'";        
+        $query_d = mysqli_query($koneksi,$sql_d);
+
+        while($data_d = mysqli_fetch_row($query_d)){
+          $id_user= $data_d[0];
+          $nama = $data_d[1];
+          $email = $data_d[2];
+          $username = $data_d[3];
+          $password = $data_d[4];
+          $level = $data_d[5];
+        }
+      }
+  ?>
 <div class="wrapper">
 <?php include("includes/header.php") ?>
 
@@ -42,9 +64,22 @@
       <!-- form start -->
       </br>
       <div class="col-sm-10">
-          <div class="alert alert-danger" role="alert">Maaf data nama wajib di isi</div>
+      <?php if(!empty($_GET['notif'])){?>
+        <?php if($_GET['notif']=="namakosong"){?>
+          <div class="alert alert-danger" role="alert">Maaf data kategori buku wajib di isi</div>
+        <?php }?>
+        <?php if($_GET['notif']=="emailkosong"){?>
+          <div class="alert alert-danger" role="alert">Maaf data kategori buku wajib di isi</div>
+        <?php }?>
+        <?php if($_GET['notif']=="usernamekosong"){?>
+          <div class="alert alert-danger" role="alert">Maaf data kategori buku wajib di isi</div>
+        <?php }?>
+        <?php if($_GET['notif']=="passwordkosong"){?>
+          <div class="alert alert-danger" role="alert">Maaf data kategori buku wajib di isi</div>
+        <?php }?>        
+      <?php }?>
       </div>
-      <form class="form-horizontal">
+      <form class="form-horizontal" method="post" action="konfirmasiedituser.php">
       <div class="card-body">
           <div class="form-group row">
             <label for="foto" class="col-sm-12 col-form-label"><span class="text-info"><i class="fas fa-user-circle"></i> <u>Data User</u></span></label>
@@ -62,33 +97,33 @@
           <div class="form-group row">
             <label for="nama" class="col-sm-3 col-form-label">Nama</label>
             <div class="col-sm-7">
-              <input type="text" class="form-control" name="nama" id="nama" value="Salnan">
+              <input type="text" class="form-control" name="nama" id="nama" value="<?php echo $nama;?>">
             </div>
           </div>
           <div class="form-group row">
             <label for="email" class="col-sm-3 col-form-label">Email</label>
             <div class="col-sm-7">
-              <input type="text" class="form-control" name="email" id="email" value="salnanrarih88@gmail.com">
+              <input type="text" class="form-control" name="email" id="email" value="<?php echo $email;?>">
             </div>
           </div>
           <div class="form-group row">
             <label for="username" class="col-sm-3 col-form-label">Username</label>
             <div class="col-sm-7">
-              <input type="text" class="form-control" name="username" id="username" value="salnan">
+              <input type="text" class="form-control" name="username" id="username" value="<?php echo $username;?>">
             </div>
           </div>
           <div class="form-group row">
             <label for="password" class="col-sm-3 col-form-label">Password</label>
             <div class="col-sm-7">
-              <input type="text" class="form-control" name="password" id="password" value="">
-              <span class="text-danger" style="font-weight:lighter;font-size:12px">
+              <input type="text" class="form-control" name="password" id="password" value="<?php echo $password;?>">
+              <!-- <span class="text-danger" style="font-weight:lighter;font-size:12px">
                *Jangan diisi jika tidak ingin mengubah password</span>
-            </div>
+            </div> -->
           </div>
           <div class="form-group row">
             <label for="level" class="col-sm-3 col-form-label">Level</label>
             <div class="col-sm-7">
-              <select class="form-control" id="jurusan">
+              <select class="form-control" name="level">
                 <option value="superadmin">superadmin</option>
                 <option value="admin">admin</option>
               </select>

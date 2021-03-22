@@ -4,6 +4,18 @@
 <?php include("includes/head.php") ?> 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
+<?php
+            include('../koneksi.php');
+              if((isset($_GET['aksi']))&&(isset($_GET['data']))){
+                if($_GET['aksi']=='hapus'){
+
+                  $id_user = $_GET['data'];
+                  //hapus kategori buku
+                  $sql_dh = "delete from `user` where `id_user` = '$id_user'";
+                  mysqli_query($koneksi,$sql_dh);
+                }
+              }
+          ?>
 <div class="wrapper">
 <?php include("includes/header.php") ?>
 
@@ -50,8 +62,15 @@
                     </div><!-- .row -->
                   </form>
                 </div><br>
-                    <div class="alert alert-success" role="alert">Data Berhasil Ditambahkan</div>
-                    <div class="alert alert-success" role="alert">Data Berhasil Diubah</div>
+                <?php if(!empty($_GET['notif'])){?>
+                      <?php if($_GET['notif']=="tambahberhasil"){?>
+                        <div class="alert alert-success" role="alert">Data Berhasil Ditambahkan</div>
+                      <?php } else if($_GET['notif']=="editberhasil"){?>
+                        <div class="alert alert-success" role="alert">Data Berhasil Diubah</div>
+                      <?php } else if($_GET['notif']=="hapusberhasil"){?>
+                        <div class="alert alert-success" role="alert">Data Berhasil Dihapus</div>
+                      <?php }?>
+                    <?php }?>
                 </div>
                 <table class="table table-bordered">
                     <thead>                  
@@ -64,28 +83,27 @@
                       </tr>
                     </thead>
                     <tbody>
+                    <?php
+                      $sql_k = "SELECT `id_user`,`nama`,`email`,`level` FROM `user` ORDER BY `id_user`";
+                      $query_k = mysqli_query($koneksi,$sql_k);
+                      $no = 1;
+                      while($data_k = mysqli_fetch_row($query_k)){
+                      $id_user = $data_k[0];
+                      $nama = $data_k[1];
+                      $email = $data_k[2];
+                      $level = $data_k[3];
+                  ?>
                       <tr>
-                        <td>1.</td>
-                        <td>Salnan Ratih</td>
-                        <td>salnanratih@gmail.com</td>
-                        <td>superadmin</td>
+                        <td><?php echo $no; ?></td>
+                        <td><?php echo $nama; ?></td>
+                        <td><?php echo $email; ?></td>
+                        <td><?php echo $level; ?></td>
                         <td align="center">
-                          <a href="edituser.php" class="btn btn-xs btn-info" title="Edit"><i class="fas fa-edit"></i></a>
-                          <a href="detailuser.php" class="btn btn-xs btn-info" title="Detail"><i class="fas fa-eye"></i></a>
-                          <a href="#" class="btn btn-xs btn-warning"><i class="fas fa-trash" title="Hapus"></i></a>                         
+                        <a href="edituser.php?data=<?php echo $id_user;?>" class="btn btn-xs btn-info"><i class="fas fa-edit"></i> Edit</a>
+                      <a href="javascript:if(confirm('Anda yakin ingin menghapus data <?php echo $nama; ?>?'))window.location.href ='user.php?aksi=hapus&data=<?php echo $id_user;?>&notif=hapusberhasil'" class="btn btn-xs btn-warning"><i class="fas fa-trash"></i>Hapus</a>                  
                         </td>
                       </tr>
-                      <tr>
-                        <td>2.</td>
-                        <td>Salnan Ratih</td>
-                        <td>salnanratih@gmail.com</td>
-                        <td>superadmin</td>
-                        <td align="center">
-                          <a href="edituser.php" class="btn btn-xs btn-info" title="Edit"><i class="fas fa-edit"></i></a>
-                           <a href="detailuser.php" class="btn btn-xs btn-info" title="Detail"><i class="fas fa-eye"></i></a>
-                           <a href="#" class="btn btn-xs btn-warning"><i class="fas fa-trash" title="Hapus"></i></a>                         
-                        </td>
-                      </tr>
+                      <?php $no++;}?>
                       
                     </tbody>
                   </table>  
